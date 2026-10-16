@@ -1,0 +1,9 @@
+mode,truth,period_bin,n,both,SAP only,PDCSAP only,neither,"peak near 13.7 d, PDCSAP","peak near 13.7 d, SAP"
+combined,MEarth,<13.7,293,127,2,132,32,1,14
+combined,MEarth,13.7-27,22,2,5,0,15,0,1
+combined,MEarth,>27,249,1,44,1,203,15,15
+combined,TARS,<13.7,75,34,0,26,15,2,2
+sector,MEarth,<13.7,1186,588,15,411,172,1,73
+sector,MEarth,13.7-27,43,0,9,1,33,2,4
+sector,MEarth,>27,1064,10,145,11,898,66,132
+sector,TARS,<13.7,181,96,1,50,34,3,7

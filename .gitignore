@@ -1,0 +1,17 @@
+# raw meeting transcripts stay local
+docs/meetings/*-transcript.txt
+
+# data and model artifacts
+data/
+processed/
+checkpoints/
+wandb/
+outputs/
+*.npz
+*.fits
+*.parquet
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

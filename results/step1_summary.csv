@@ -1,0 +1,8 @@
+sample,period_bin,n_stars,n_with_spoc_2min,median_sectors_if_covered,max_sectors
+mearth_n,<13.7,221,204,3.0,38
+mearth_n,13.7-27,17,16,2.0,4
+mearth_n,>27,139,132,3.0,39
+mearth_s,<13.7,98,89,3.0,41
+mearth_s,13.7-27,7,6,2.0,2
+mearth_s,>27,127,117,3.0,42
+tars,<13.7,75,75,2.0,8

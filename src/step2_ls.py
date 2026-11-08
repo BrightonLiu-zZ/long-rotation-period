@@ -185,7 +185,7 @@ def summarize(table: pd.DataFrame) -> pd.DataFrame:
     Sector mode counts star-sectors; combined mode counts stars.
     """
     done = table[table["status"] == "done"].copy()
-    done["truth"] = np.where(done["sample"] == "tars", "TARS", "MEarth")
+    done["truth"] = done["sample"].map({"tars": "TARS", "mcquillan": "McQuillan"}).fillna("MEarth")
     rows = []
     for (truth, period_bin, mode), group in done.groupby(["truth", "period_bin", "mode"], sort=False):
         rows.append({
@@ -210,12 +210,13 @@ def main() -> None:
     parser.add_argument("--workers", type=int, default=6)
     parser.add_argument("--tag", default="", help="suffix for output names, e.g. _smoke")
     parser.add_argument("--limit-stars", type=int, default=None, help="only the first N stars (smoke test)")
+    parser.add_argument("--truth", type=Path, default=truth_path, help="truth table; use with a --tag so outputs do not overwrite the MEarth run")
     args = parser.parse_args()
 
     log_path = repo / "data" / f"ls_{args.flux}{args.tag}.log"
     handlers: list[logging.Handler] = [logging.StreamHandler(sys.stdout), logging.FileHandler(log_path, mode="a", encoding="utf-8")]
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", handlers=handlers, force=True)
-    truth = pd.read_csv(truth_path)
+    truth = pd.read_csv(args.truth)
     progress = pd.read_csv(progress_path, keep_default_na=False)
     progress = progress[progress["status"] == "done"]
     files_by_star: dict[int, list[tuple[int, str]]] = {}

@@ -94,7 +94,7 @@ def download_one(tic_id: int, sector: int, obs_id: str) -> dict:
     }
 
 
-def select_jobs(n_stars: int | None, seed: int) -> pd.DataFrame:
+def select_jobs(n_stars: int | None, seed: int, truth_path: Path, obs_path: Path) -> pd.DataFrame:
     """
     Star-sectors to download: all covered stars, or a pilot of n_stars stars drawn evenly across samples and period bins.
     """
@@ -117,12 +117,14 @@ def main() -> None:
     parser.add_argument("--pilot-stars", type=int, default=None, help="download only this many stars")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--truth", type=Path, default=truth_path, help="truth table with tic_id, sample, period_bin, n_spoc_sectors")
+    parser.add_argument("--obs", type=Path, default=obs_path, help="MAST SPOC 2-min cache matching --truth")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", stream=sys.stdout)
     fits_dir.mkdir(parents=True, exist_ok=True)
 
-    jobs = select_jobs(args.pilot_stars, args.seed)
+    jobs = select_jobs(args.pilot_stars, args.seed, args.truth, args.obs)
     if progress_path.exists():
         progress = pd.read_csv(progress_path, keep_default_na=False)
     else:

@@ -7,7 +7,6 @@ Reads results/ls_*_summary.csv, results/step3_chance_baseline.csv, results/step5
 """
 
 import matplotlib
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -45,7 +44,7 @@ def grouped_bars(ax: plt.Axes, values: pd.DataFrame, chance: pd.DataFrame | None
     ax.spines[["top", "right"]].set_visible(False)
 
 
-def figure_pdcsap_vs_sap() -> None:
+def figure_pdcsap_vs_sap() -> plt.Figure:
     chance = pd.read_csv(results_dir / "step3_chance_baseline.csv")
     chance = chance[chance["mode"] == "combined"]
     observed = chance.pivot(index="period_bin", columns="flux", values="observed_hit_rate").loc[period_labels]
@@ -62,11 +61,10 @@ def figure_pdcsap_vs_sap() -> None:
     ax.legend(frameon=False, fontsize=9)
     ax.set_title("Lomb-Scargle on SPOC light curves, all sectors of a star combined", fontsize=10)
     fig.tight_layout()
-    fig.savefig(results_dir / "plots" / "report_ls_pdcsap_vs_sap.png", dpi=150)
-    plt.close(fig)
+    return fig
 
 
-def figure_step5() -> None:
+def figure_step5() -> plt.Figure:
     forecast = pd.read_csv(results_dir / "step5_forecast_summary.csv")
     forecast = forecast[forecast["truth"] == "MEarth"]
     methods = {"mean": "flat line", "sinusoid": "fitted sinusoid", "l1": "conv net (L1 only)", "gan_1": "GAN"}
@@ -108,11 +106,10 @@ def figure_step5() -> None:
     left.set_xlabel("MEarth period bin (n = star-sectors)")
     right.set_xlabel("MEarth period bin (n = star-sectors)")
     fig.tight_layout()
-    fig.savefig(results_dir / "plots" / "report_step5.png", dpi=150)
-    plt.close(fig)
+    return fig
 
 
 if __name__ == "__main__":
-    figure_pdcsap_vs_sap()
-    figure_step5()
+    figure_pdcsap_vs_sap().savefig(results_dir / "plots" / "report_ls_pdcsap_vs_sap.png", dpi=150)
+    figure_step5().savefig(results_dir / "plots" / "report_step5.png", dpi=150)
     print("wrote results/plots/report_ls_pdcsap_vs_sap.png and results/plots/report_step5.png")
